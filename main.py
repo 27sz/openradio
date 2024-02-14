@@ -265,8 +265,8 @@ def create_genre():
 
 @app.route("/about")
 def about():
-    text = """BlacklandRadio - полностью бесплатный и открытый музыкальный сервис. 
-    Created by @gepron1x, @stepaldo, @IDontUnderstandPycharm"""
+    text = """OpenRadio - бесплатный сервис для музыкантов и их слушателей. 
+    Created by антон"""
     return render_template("about.html", about=text)
 
 
