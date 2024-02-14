@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="bg-light p-5 border rounded">
+    <h1><a href="/profile/{{ album.author_id }}">{{ album.author.name }}</a> - {{ album.name }} </h1>
+    <img src="{{ album.cover_url }}" width="400" height="400">
+    <h2> {{ album.year }} </h2>
+
+    <h2>Описание</h2>
+    <p class="lead">
+        {{ album.description }}
+    </p>
+
+    <h3>{{ album.genre.name }}</h3>
+    {% if current_user.is_authenticated %}
+        {% if album not in user.favorites %}
+            <a class="btn btn-primary" href="/profile/favorites/add/{{ album.id }}">Добавить в любимые</a>
+        {% else %}
+            <a class="btn btn-danger" href="/profile/favorites/remove/{{ album.id }}">Удалить из любимых альбомов</a>
+        {% endif %}
+    {% endif %}
+
+    {% for song in album.songs %}
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <h3>{{ song.name }}</h3>
+            <audio controls>
+                <source src="{{ song.url }}" type="audio/mpeg">
+                <p>Ваш браузер не поддерживает HTML5 аудио.</p>
+            </audio>
+        </div>
+    {% endfor %}
+
+    <h2>Комментарии</h2>
+    <div class="h-100 p-5 bg-light border rounded-3">
+        <form class="comment_form" method="post" action="">
+            {{ comment_form.hidden_tag() }}
+            <p>
+                {{ comment_form.content.label }}
+                {{ comment_form.content }}
+                {% for error in comment_form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+            </p>
+            <p>{{ comment_form.submit }}</p>
+        </form>
+    </div>
+    {% for comment in album.comments %}
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <p> <img src="{{ comment.author.avatar_url }}" height="100" width="100"> <a href="/profile/{{ comment.author_id }}">{{ comment.author.name }}</a></p>
+            <p>{{ comment.content }}</p>
+        </div>
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}
+
